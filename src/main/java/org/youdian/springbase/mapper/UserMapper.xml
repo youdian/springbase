@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="org.youdian.springbase.mapper.UserMapper">
+	<resultMap id="insertUser" type="User">
+		<id property="id" column="id" />
+		<result property="name" column="name" javaType="string"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="insertUser" parameterType="User" >
+		insert into user(name) values(#{name})
+	</select>
+</mapper>  
