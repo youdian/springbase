@@ -3,58 +3,63 @@ package org.youdian.springbase.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.UserService;
+import org.youdian.springbase.util.ResponseEntityUtil;
 
-@Controller
-@RequestMapping("/user")
-public class UserController {
+@RestController
+@RequestMapping("/users")
+public class UserController{
 	
 	@Autowired
 	UserService userService;
 	
-	@ResponseBody
-	@RequestMapping("/insert")
-	public User insert() {
-		User user = new User();
-		user.setName("小子奥");
+	@RequestMapping(value="/", method = RequestMethod.PUT)
+	public ResponseEntity<?> newUser(@RequestBody User user) {
+		if (user.getName() == null) {
+			return ResponseEntityUtil.entityWithSimpleResponse(-1, "用户名不能为空", HttpStatus.BAD_REQUEST);
+		}
 		userService.insertUser(user);
-		return user;
+		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.CREATED);
 	}
-	
-	@ResponseBody
-	@RequestMapping("/update")
-	public User update() {
-		User user = new User();
-		user.setId(3);
-		user.setEmail("aa@bb.com");
+	//使用@RequestBody时，请求的实体类型需要设置为application/json
+	@RequestMapping(value="/{id}", method=RequestMethod.POST)
+	public ResponseEntity<?> update(@PathVariable int id, @RequestBody User user) {
+		System.out.println(user);
 		userService.updateUser(user);
-		return user;
+		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);
 				
 	}
 	
-	@ResponseBody
-	@RequestMapping("/delete")
-	public void delete() {
-		int id = 4;
-		User user = new User();
-		user.setId(id);
-		userService.deleteUser(user);
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<?> delete(@PathVariable int id) {
+		userService.deleteUser(id);
+		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public ResponseEntity<?> listUser() {
+		List<User> users = userService.listUser();
+		return ResponseEntityUtil.entityWithData(users, HttpStatus.OK);
 	}
 	
 	@ResponseBody
-	@RequestMapping("/list")
-	public List<User> listUser() {
-		return userService.listUser();
-	}
-	
-	@ResponseBody
-	@RequestMapping("/")
-	public User selectUser() {
-		int id = 5;
-		return userService.selectUser(id);
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<?> selectUser(@PathVariable int id) {
+		User user = userService.selectUser(id);
+		if (user != null) {
+			return ResponseEntityUtil.entityWithData(user, HttpStatus.OK);
+		} else {
+			return ResponseEntityUtil.entityWithSimpleResponse(-1, "用户不存在", HttpStatus.BAD_REQUEST);
+		}
+
 	}
 }

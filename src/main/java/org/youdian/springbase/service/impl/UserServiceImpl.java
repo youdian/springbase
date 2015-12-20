@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
 		return userMapper.listUser();
 	}
 
-	public void deleteUser(User user) {
+	public void deleteUser(int id) {
 		// TODO Auto-generated method stub
-		userMapper.deleteUser(user);
+		userMapper.deleteUser(id);
 	}
 
 	public User selectUser(int id) {
