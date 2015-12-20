@@ -9,7 +9,23 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="name" column="name" javaType="string"
 			jdbcType="VARCHAR" />
 	</resultMap>
-	<select id="insertUser" parameterType="User" >
+	<insert id="insertUser" parameterType="User" keyProperty="id"
+		useGeneratedKeys="true">
 		insert into user(name) values(#{name})
+	</insert>
+	<update id="updateUser" parameterType="User" flushCache="true">
+		update
+		user set email=#{email} where id=#{id}
+	</update>
+	<select id="selectUser" parameterType="int" resultType="User">
+		select *
+		from user where id=#{id}
 	</select>
+	<select id="listUser" resultType="User">
+		select * from user
+	</select>
+	<delete id="deleteUser" flushCache="true" parameterType="User">
+		delete
+		from user where id=#{id}
+	</delete>
 </mapper>  
