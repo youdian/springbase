@@ -10,5 +10,6 @@ public interface UserService {
 	public void updateUser(User user);
 	public User selectUser(int id);
 	public List<User> listUser();
+	public List<User> searchUser(String name);
 	public void deleteUser(int id);
 }

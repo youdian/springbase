@@ -13,7 +13,7 @@ public class HelloController {
 	@RequestMapping("/hello.do")
 	public User sayHello() {
 		User user = new User();
-		user.setId(1);
+		user.setUid(1);
 		user.setName("xiaoming");
 		return user;
 	}

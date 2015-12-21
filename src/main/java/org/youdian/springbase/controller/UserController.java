@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.youdian.springbase.annotation.AuthRequired;
-import org.youdian.springbase.annotation.AuthRequired.AuthType;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.UserService;
 import org.youdian.springbase.util.ResponseEntityUtil;
 
 @RestController
 @RequestMapping("/users")
-public class UserController{
+public class UserController extends BaseController{
 	
 	@Autowired
 	UserService userService;
@@ -37,8 +37,8 @@ public class UserController{
 	@RequestMapping(value="/{id}", method=RequestMethod.POST)
 	@AuthRequired
 	public ResponseEntity<?> update(@ModelAttribute("currentUser") User currentUser, @PathVariable int id, @RequestBody User user) {
-		user.setId(id);
-		System.out.println(user);
+		user.setUid(id);
+		System.out.println(currentUser);
 		if (currentUser.equals(user)) {
 			userService.updateUser(user);
 			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);	
@@ -51,7 +51,7 @@ public class UserController{
 	@AuthRequired
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@ModelAttribute("currentUser") User currentUser, @PathVariable int id) {
-		if (currentUser.getId() == id) {
+		if (currentUser.getUid() == id) {
 			userService.deleteUser(id);
 			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);	
 		} else {
@@ -62,6 +62,13 @@ public class UserController{
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public ResponseEntity<?> listUser() {
 		List<User> users = userService.listUser();
+		return ResponseEntityUtil.entityWithData(users, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/search", method=RequestMethod.GET)
+	public ResponseEntity<?> searchUser(@RequestParam String name) {
+		List<User> users = userService.searchUser(name);
 		return ResponseEntityUtil.entityWithData(users, HttpStatus.OK);
 	}
 	

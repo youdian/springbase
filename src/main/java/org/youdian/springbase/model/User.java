@@ -2,14 +2,14 @@ package org.youdian.springbase.model;
 
 public class User {
 
-	private int id;
+	private int uid;
 	private String name;
 	private String email;
-	public int getId() {
-		return id;
+	public int getUid() {
+		return uid;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 	public String getName() {
 		return name;
@@ -25,13 +25,13 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + "]";
+		return "User [uid=" + uid + ", name=" + name + ", email=" + email + "]";
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + uid;
 		return result;
 	}
 	@Override
@@ -43,7 +43,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
+		if (uid != other.uid)
 			return false;
 		return true;
 	}

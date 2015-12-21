@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.youdian.springbase.mapper.UserMapper;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.UserService;
+import org.youdian.springbase.util.StringUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,28 +16,30 @@ public class UserServiceImpl implements UserService {
 	UserMapper userMapper;
 	
 	public int insertUser(User user) {
-		// TODO Auto-generated method stub
 		return userMapper.insertUser(user);
 	}
 
 	public void updateUser(User user) {
-		// TODO Auto-generated method stub
 		userMapper.updateUser(user);
 	}
 
 	public List<User> listUser() {
-		// TODO Auto-generated method stub
 		return userMapper.listUser();
 	}
 
 	public void deleteUser(int id) {
-		// TODO Auto-generated method stub
 		userMapper.deleteUser(id);
 	}
 
 	public User selectUser(int id) {
-		// TODO Auto-generated method stub
 		return userMapper.selectUser(id);
+	}
+
+	@Override
+	public List<User> searchUser(String name) {
+		name = StringUtils.encodeChineseUrl(name);
+		System.out.println("name="+name);
+		return userMapper.searchUser(name);
 	}
 
 }

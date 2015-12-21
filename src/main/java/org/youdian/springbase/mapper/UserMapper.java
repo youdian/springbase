@@ -11,7 +11,8 @@ public interface UserMapper {
 	public int insertUser(User user);
 	
 	public void updateUser(User user);
-	public User selectUser(int id);
+	public User selectUser(int uid);
 	public List<User> listUser();
-	public void deleteUser(int id);
+	public List<User> searchUser(String name);
+	public void deleteUser(int uid);
 }

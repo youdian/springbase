@@ -5,27 +5,37 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.youdian.springbase.mapper.UserMapper">
 	<resultMap id="insertUser" type="User">
-		<id property="id" column="id" />
+		<id property="uid" column="uid" />
 		<result property="name" column="name" javaType="string"
 			jdbcType="VARCHAR" />
 	</resultMap>
-	<insert id="insertUser" parameterType="User" keyProperty="id"
+	<insert id="insertUser" parameterType="User" keyProperty="uid"
 		useGeneratedKeys="true">
 		insert into user(name) values(#{name})
 	</insert>
 	<update id="updateUser" parameterType="User" flushCache="true">
-		update
-		user set email=#{email} where id=#{id}
+		update user
+		<set>
+			<if test="name != null">name=#{name},</if>
+			<if test="email != null">email=#{email}</if>
+		</set>
+		where uid=#{uid}
 	</update>
 	<select id="selectUser" parameterType="int" resultType="User">
 		select *
-		from user where id=#{id}
+		from user where uid=#{uid}
 	</select>
 	<select id="listUser" resultType="User">
 		select * from user
 	</select>
+	<select id="searchUser" parameterType="String" resultType="User">
+		select * from user
+		<where>
+			<if test="_parameter != null">name=#{_parameter}</if>
+		</where>
+	</select>
 	<delete id="deleteUser" flushCache="true" parameterType="int">
 		delete
-		from user where id=#{id}
+		from user where uid=#{uid}
 	</delete>
 </mapper>  

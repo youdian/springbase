@@ -1,7 +1,6 @@
 package org.youdian.springbase.interceptor;
 
 import java.lang.reflect.Method;
-import java.util.Enumeration;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +46,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("authType=optional");
 				if (token != null && tokenSecret != null) {
 					User user = getUserId(token, tokenSecret);
-					if (user.getId() != INVALID_USER_ID) {
+					if (user.getUid() != INVALID_USER_ID) {
 						request.setAttribute(ATTR_CURRENT_USER, user);
 					}
 				}
@@ -56,7 +55,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("authType=required");
 				if (token != null || tokenSecret != null) {
 					User user = getUserId(token, tokenSecret);
-					if (user.getId() == INVALID_USER_ID) {
+					if (user.getUid() == INVALID_USER_ID) {
 						response.setStatus(403);
 						return false;
 					}
@@ -82,7 +81,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 	private User getUserId(String token, String tokenSecret) {
 		User user = new User();
-		user.setId(2);
+		user.setUid(8);
 		user.setName("authUser");
 		return user;
 	}
