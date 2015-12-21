@@ -32,6 +32,14 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 		</property>
 	</bean>
 
+
+	<mvc:interceptors>
+		<bean class="org.youdian.springbase.interceptor.AuthInterceptor"/>
+		<mvc:interceptor>
+			<mvc:mapping path="/notset"/>
+			<bean class="org.youdian.springbase.interceptor.AllInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
 		destroy-method="close"> <property name="driverClass" value="${jdbc.driverClassName}" 
 		/> <property name="jdbcUrl" value="${jdbc.url}" /> <property name="user" 

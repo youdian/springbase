@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.youdian.springbase.annotation.AuthRequired;
+import org.youdian.springbase.annotation.AuthRequired.AuthType;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.UserService;
 import org.youdian.springbase.util.ResponseEntityUtil;
@@ -32,17 +35,28 @@ public class UserController{
 	}
 	//使用@RequestBody时，请求的实体类型需要设置为application/json
 	@RequestMapping(value="/{id}", method=RequestMethod.POST)
-	public ResponseEntity<?> update(@PathVariable int id, @RequestBody User user) {
+	@AuthRequired
+	public ResponseEntity<?> update(@ModelAttribute("currentUser") User currentUser, @PathVariable int id, @RequestBody User user) {
+		user.setId(id);
 		System.out.println(user);
-		userService.updateUser(user);
-		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);
+		if (currentUser.equals(user)) {
+			userService.updateUser(user);
+			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);	
+		} else {
+			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.FORBIDDEN);
+		}
 				
 	}
 	
+	@AuthRequired
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-	public ResponseEntity<?> delete(@PathVariable int id) {
-		userService.deleteUser(id);
-		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);
+	public ResponseEntity<?> delete(@ModelAttribute("currentUser") User currentUser, @PathVariable int id) {
+		if (currentUser.getId() == id) {
+			userService.deleteUser(id);
+			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.OK);	
+		} else {
+			return ResponseEntityUtil.entityWithStatusCode(HttpStatus.FORBIDDEN);	
+		}
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
