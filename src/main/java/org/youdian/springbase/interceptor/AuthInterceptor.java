@@ -1,6 +1,7 @@
 package org.youdian.springbase.interceptor;
 
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +25,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		HandlerMethod hm = (HandlerMethod) handler;
 		Method method = hm.getMethod();
 		if (method.isAnnotationPresent(AuthRequired.class)) {
-			String token = "1";
-			String tokenSecret = "1";
+			String token = null;
+			String tokenSecret = null;
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie: cookies) {
+					System.out.println(cookie);
 					String name = cookie.getName();
 					String value = cookie.getValue();
 					if (TOKEN.equals(name)) {
