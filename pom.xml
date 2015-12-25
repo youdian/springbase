@@ -224,20 +224,38 @@
 			<version>1.9.13</version>
 		</dependency>
 		<!--end -->
+		<!-- 访问redis的lib -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.6.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<!-- requested by spring redis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<!-- redis libs end -->
 	</dependencies>
 	<build>
 		<finalName>springbase</finalName>
-		 <plugins>
+		<plugins>
 
-        <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
-            <configuration>
-                <source>1.7</source> <!-- yours Java version -->
-                <target>1.7</target> <!-- yours Java version -->
-            </configuration>
-        </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source> <!-- yours Java version -->
+					<target>1.7</target> <!-- yours Java version -->
+				</configuration>
+			</plugin>
 
-    </plugins>
+		</plugins>
 	</build>
 </project>

@@ -11,6 +11,7 @@ public class GlobalAdvice {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception ex) {
+		ex.printStackTrace();
 		System.out.println("exception in globalAdvice " + ex.toString());
 		return ResponseEntityUtil.entityWithStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
 	}

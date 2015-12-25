@@ -6,18 +6,22 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.youdian.springbase.annotation.AuthRequired;
 import org.youdian.springbase.annotation.AuthRequired.AuthType;
 import org.youdian.springbase.model.User;
+import org.youdian.springbase.service.RedisService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public static final String TOKEN = "token";
-	public static final String TOKEN_SECRET = "tokenSecret";
 	public static final String ATTR_CURRENT_USER = "currentUser";
-	private static final int INVALID_USER_ID = -1;
+	
+	@Autowired
+	RedisService redisService;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -25,7 +29,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		Method method = hm.getMethod();
 		if (method.isAnnotationPresent(AuthRequired.class)) {
 			String token = null;
-			String tokenSecret = null;
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie: cookies) {
@@ -34,28 +37,26 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 					String value = cookie.getValue();
 					if (TOKEN.equals(name)) {
 						token = value;
-					} else if (TOKEN_SECRET.equals(name)) {
-						tokenSecret = value;
 					}
 				}
 			}
-			System.out.println("token=" + token + ",secret=" + tokenSecret);
+			System.out.println("token=" + token);
 			AuthType authType = method.getAnnotation(AuthRequired.class).value();
 			switch (authType) {
 			case OPTIONAL:
 				System.out.println("authType=optional");
-				if (token != null && tokenSecret != null) {
-					User user = getUserId(token, tokenSecret);
-					if (user.getUid() != INVALID_USER_ID) {
+				if (token != null) {
+					User user = getUserId(token);
+					if (user.getUid() != User.INVALID_USER_ID) {
 						request.setAttribute(ATTR_CURRENT_USER, user);
 					}
 				}
 				break;
 			case REQUIRED:
 				System.out.println("authType=required");
-				if (token != null || tokenSecret != null) {
-					User user = getUserId(token, tokenSecret);
-					if (user.getUid() == INVALID_USER_ID) {
+				if (token != null) {
+					User user = getUserId(token);
+					if (user.getUid() == User.INVALID_USER_ID) {
 						response.setStatus(403);
 						return false;
 					}
@@ -79,9 +80,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
-	private User getUserId(String token, String tokenSecret) {
+	private User getUserId(String token) {
+		int uid = redisService.getUserId(token);
+		System.out.print(uid);
 		User user = new User();
-		user.setUid(8);
+		user.setUid(uid);
 		user.setName("authUser");
 		return user;
 	}

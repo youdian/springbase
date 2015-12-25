@@ -10,7 +10,6 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 	<context:annotation-config />
 
 	<context:component-scan base-package="org.youdian.springbase" />
-
 	<mvc:annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
@@ -20,7 +19,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 	<mvc:resources mapping="/images/**" location="/images/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
 
-	<!-- 导入属性配置文件 -->
+	<!-- 导入属性配置文件 alternative way-->
 	<!-- <context:property-placeholder location="/WEB-INF/mysql.properties" 
 		/> -->
 	<bean
@@ -28,6 +27,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/mysql.properties</value>
+				<value>/WEB-INF/redis.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -156,4 +156,14 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 			<value>4096</value>
 		</property>
 	</bean>
+	
+	<!-- 访问redis -->
+	<bean id="jedisConnFactory" 
+    class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}">  
+    </bean>
+
+	<!-- redis template definition -->
+	<bean id="redisTemplate" 
+    	class="org.springframework.data.redis.core.RedisTemplate" 
+    	p:connection-factory-ref="jedisConnFactory"/>
 </beans>
