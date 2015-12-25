@@ -19,4 +19,13 @@ public class StringUtils {
 		}
 	    return value;
 	}
+	
+	/**
+	 * string为null或者为空
+	 * @param str
+	 * @return
+	 */
+	public static boolean isEmpty(String str) {
+		return str == null || str.isEmpty();
+	}
 }

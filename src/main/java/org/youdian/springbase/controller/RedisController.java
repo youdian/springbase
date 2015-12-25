@@ -17,12 +17,12 @@ public class RedisController {
 	
 	@RequestMapping(value="/{key}")
 	public String get(@PathVariable String key) {
-		return String.valueOf(redisService.getUserId(key));
+		return String.valueOf(redisService.getValue(key));
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public String set(@RequestParam String key, @RequestParam String value) {
-		redisService.setUserId(key, value);
+		redisService.putValue(key, value);
 		return "";
 	}
 }

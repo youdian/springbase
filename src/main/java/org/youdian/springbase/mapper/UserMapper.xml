@@ -13,6 +13,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true">
 		insert into user(name) values(#{name})
 	</insert>
+	<insert id="registerUserByPhone" parameterType="User" keyProperty="uid"
+		useGeneratedKeys="true">
+		insert into user(phone, password) values(#{phone}, #{password})
+	</insert>
 	<update id="updateUser" parameterType="User" flushCache="true">
 		update user
 		<set>
@@ -24,6 +28,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="selectUser" parameterType="int" resultType="User">
 		select *
 		from user where uid=#{uid}
+	</select>
+	<select id="selectUserByPhone" parameterType="String" resultType="User">
+		select *  from user where phone = #{_parameter}
+	</select>
+	<select id="selectUserByOpenId" parameterType="String" resultType="User">
+		select * from user where openid=#{_parameter}
 	</select>
 	<select id="listUser" resultType="User">
 		select * from user

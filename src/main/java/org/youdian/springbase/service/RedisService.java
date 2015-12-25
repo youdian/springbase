@@ -2,6 +2,6 @@ package org.youdian.springbase.service;
 
 public interface RedisService {
 
-	public int getUserId(String key);
-	public void setUserId(String key, String id); 
+	public String getValue(String key);
+	public void putValue(String key, String value); 
 }

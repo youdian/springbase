@@ -14,6 +14,7 @@ import org.youdian.springbase.annotation.AuthRequired;
 import org.youdian.springbase.annotation.AuthRequired.AuthType;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.RedisService;
+import org.youdian.springbase.service.UserService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public static final String TOKEN = "token";
@@ -21,7 +22,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	
 	@Autowired
 	RedisService redisService;
-	
+	@Autowired
+	UserService userService;
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -32,7 +34,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie: cookies) {
-					System.out.println(cookie);
 					String name = cookie.getName();
 					String value = cookie.getValue();
 					if (TOKEN.equals(name)) {
@@ -46,8 +47,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			case OPTIONAL:
 				System.out.println("authType=optional");
 				if (token != null) {
-					User user = getUserId(token);
-					if (user.getUid() != User.INVALID_USER_ID) {
+					User user = getUser(token);
+					if (user != null) {
 						request.setAttribute(ATTR_CURRENT_USER, user);
 					}
 				}
@@ -55,8 +56,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			case REQUIRED:
 				System.out.println("authType=required");
 				if (token != null) {
-					User user = getUserId(token);
-					if (user.getUid() == User.INVALID_USER_ID) {
+					User user = getUser(token);
+					if (user == null) {
 						response.setStatus(403);
 						return false;
 					}
@@ -80,12 +81,19 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
-	private User getUserId(String token) {
-		int uid = redisService.getUserId(token);
-		System.out.print(uid);
-		User user = new User();
-		user.setUid(uid);
-		user.setName("authUser");
-		return user;
+	private User getUser(String token) {
+		String uidStr = redisService.getValue(token);
+		int uid = User.INVALID_USER_ID;
+		try {
+			uid = Integer.valueOf(uidStr);
+		} catch (NumberFormatException e) {
+			
+		}
+		System.out.println(uid);
+		if (uid != User.INVALID_USER_ID) {
+			User user = userService.selectUser(uid);
+			return user;	
+		}
+		return null;
 	}
 }

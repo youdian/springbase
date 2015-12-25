@@ -42,4 +42,19 @@ public class UserServiceImpl implements UserService {
 		return userMapper.searchUser(name);
 	}
 
+	@Override
+	public User selectUserByPhone(String phone) {
+		return userMapper.selectUserByPhone(phone);
+	}
+
+	@Override
+	public User selectUserByOpenId(String openId) {
+		return userMapper.selectUserByOpenId(openId);
+	}
+
+	@Override
+	public int registerUserByPhone(User user) {
+		return userMapper.registerUserByPhone(user);
+	}
+
 }
