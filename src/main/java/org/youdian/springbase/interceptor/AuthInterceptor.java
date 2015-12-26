@@ -46,12 +46,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			switch (authType) {
 			case OPTIONAL:
 				System.out.println("authType=optional");
-				if (token != null) {
-					User user = getUser(token);
-					if (user != null) {
-						request.setAttribute(ATTR_CURRENT_USER, user);
-					}
-				}
 				break;
 			case REQUIRED:
 				System.out.println("authType=required");
@@ -61,7 +55,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 						response.setStatus(403);
 						return false;
 					}
-					request.setAttribute(ATTR_CURRENT_USER, user);
 				} else {
 					response.setStatus(403);
 					return false;

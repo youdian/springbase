@@ -6,15 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+//注入当前登录用户
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 @Documented
-public @interface AuthRequired {
+public @interface CurrrentUser {
 
-	public enum AuthType {
-		REQUIRED,
-		OPTIONAL
-	}
-	
-	AuthType value() default AuthType.REQUIRED;
 }
