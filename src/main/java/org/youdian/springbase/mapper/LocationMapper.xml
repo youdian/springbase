@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="org.youdian.springbase.mapper.LocationMapper">
+	<insert id="insertLocation" parameterType="GeoLocation">
+		insert into springbase.location(id, lon, lat, loc) 
+		values(#{id}, #{longtitude}, #{latitude}, point(#{longtitude}, #{latitude}))
+	</insert>
+	<!-- 搜索附近dist miles的地点 -->
+	<select id="findNearbyLocations" parameterType="map" resultType="GeoLocation">
+		set @lat= #{latitude};
+		set @lon= #{longtitude};
+		set @dist= #{distance};
+		set @rlon1= @lon-@dist/abs(cos(radians(@lat))*69);
+		set @rlon2= @lon+@dist/abs(cos(radians(@lat))*69);
+		set @rlat1= @lat-(@dist/69);
+		set @rlat2= @lat+(@dist/69);
+		select astext(loc), id, lat as latitude, lon as longtitude from springbase.location
+		where st_within(loc, envelope(linestring(point(@rlon1, @rlat1), point(@rlon2, @rlat2))))
+		order by st_distance(point(@lon, @lat), loc) limit  30;
+	</select>
+	<!--  harvesine函数
+	create DEFINER = CURRENT_USER function harvesine (lat1 double, lon1 double, lat2 double, lon2 double) returns double
+ return  3956 * 2 * ASIN(SQRT(POWER(SIN((lat1 - abs(lat2)) * pi()/180 / 2), 2) 
+         + COS(abs(lat1) * pi()/180 ) * COS(abs(lat2) * pi()/180) * POWER(SIN((lon1 - lon2) * pi()/180 / 2), 2) )) ;
+	
+	 -->
+	<select id="findNearbyLocationsWithDistance" parameterType="GeoLocation" resultType="GeoLocation">
+		set @lat= #{latitude};
+		set @lon= #{longtitude};
+		set @dist= 100;
+		set @rlon1= @lon-@dist/abs(cos(radians(@lat))*69);
+		set @rlon2= @lon+@dist/abs(cos(radians(@lat))*69);
+		set @rlat1= @lat-(@dist/69);
+		set @rlat2= @lat+(@dist/69);
+		select harvesine(y(loc), x(loc), @lat, @lon ) as distance, id, lat as latitude, lon as longtitude from springbase.location
+		where st_within(loc, envelope(linestring(point(@rlon1, @rlat1), point(@rlon2, @rlat2))))
+		order by distance limit  30;
+	</select>
+</mapper>

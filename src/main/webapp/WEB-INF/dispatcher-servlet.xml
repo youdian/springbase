@@ -122,6 +122,10 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 		<property name="mapperInterface" value="org.youdian.springbase.mapper.UserMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+		<bean id="locationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="org.youdian.springbase.mapper.LocationMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 	
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
