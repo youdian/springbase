@@ -20,7 +20,12 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
-//全局错误处理
+
+/**
+ * 错误码异常信息返回json格式数据
+ * @author zhouzhou
+ *
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 

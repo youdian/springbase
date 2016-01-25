@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.youdian.springbase.service.RedisService;
 
+/**
+ * 操作redis的测试代码
+ * @author zhouzhou
+ *
+ */
 @RestController
 @RequestMapping("/redis")
 public class RedisController {

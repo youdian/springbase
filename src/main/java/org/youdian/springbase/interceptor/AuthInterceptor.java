@@ -15,7 +15,11 @@ import org.youdian.springbase.annotation.AuthRequired.AuthType;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.RedisService;
 import org.youdian.springbase.service.UserService;
-
+/**
+ * 处理用户身份信息
+ * @author zhouzhou
+ *
+ */
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public static final String TOKEN = "token";
 	public static final String ATTR_CURRENT_USER = "currentUser";

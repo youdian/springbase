@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.youdian.springbase.model.User;
 
+/**
+ * 用户相关的数据库操作
+ * @author zhouzhou
+ *
+ */
 @Repository
 public interface UserMapper {
 

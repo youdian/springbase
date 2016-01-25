@@ -13,7 +13,11 @@ import org.youdian.springbase.annotation.CurrrentUser;
 import org.youdian.springbase.interceptor.AuthInterceptor;
 import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.RedisService;
-
+/**
+ * 负责解析 CurrentUser注解
+ * @author zhouzhou
+ *
+ */
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
 	@Autowired

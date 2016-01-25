@@ -23,7 +23,11 @@ import org.youdian.springbase.util.PatternUtils;
 import org.youdian.springbase.util.ResponseEntityUtil;
 import org.youdian.springbase.util.StringUtils;
 
-//处理用户注册，登录相关
+/**
+ * 处理用户注册登录相关信息
+ * @author zhouzhou
+ *
+ */
 @RestController
 @RequestMapping("/account")
 public class AccountController extends BaseController {

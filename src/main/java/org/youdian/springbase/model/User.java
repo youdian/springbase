@@ -1,5 +1,10 @@
 package org.youdian.springbase.model;
 
+/**
+ * 用户信息
+ * @author zhouzhou
+ *
+ */
 public class User {
 	public static final int INVALID_USER_ID = -1;
 	private int uid;

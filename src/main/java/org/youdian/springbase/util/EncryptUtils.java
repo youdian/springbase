@@ -3,11 +3,20 @@ package org.youdian.springbase.util;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
+/**
+ * 加密工具类
+ * @author zhouzhou
+ *
+ */
 public class EncryptUtils {
 
 	private static final String SALT ="youdian543337061org";
 	
+	/**
+	 * 使用sha-256加密一段字符串
+	 * @param source
+	 * @return
+	 */
 	public static String stringEncryptedWithSHA256(String source) {
 		if (source == null || source.isEmpty()) {
 			throw new IllegalArgumentException("source can't be null or empty");

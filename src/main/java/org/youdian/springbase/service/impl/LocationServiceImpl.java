@@ -10,8 +10,6 @@ import org.youdian.springbase.service.LocationService;
 
 @Service
 public class LocationServiceImpl implements LocationService {
-	//搜索范围限定到附近500英里内
-	private static final double distance = 500;
 	@Autowired
 	LocationMapper locationMapper;
 	

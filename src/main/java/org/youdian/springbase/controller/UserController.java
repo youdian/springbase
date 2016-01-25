@@ -18,6 +18,11 @@ import org.youdian.springbase.model.User;
 import org.youdian.springbase.service.UserService;
 import org.youdian.springbase.util.ResponseEntityUtil;
 
+/**
+ * 用户管理controller
+ * @author zhouzhou
+ *
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController extends BaseController{
